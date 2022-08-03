@@ -1,0 +1,49 @@
+.calc {
+  border: 2px solid red;
+  width: 350px;
+  height: 600px;
+  text-align: center;
+  margin: 0 auto;
+  border-radius: 10%;
+}
+.calc_disp input {
+  display: inline-block;
+  width: 80%;
+  height: 50px;
+  margin-top: 60px;
+  border-radius: 5%;
+  border: 3px solid green;
+}
+.currency_wrapper {
+  height: 40px;
+  width: 80px;
+  border: 1px solid yellow;
+  margin: 0 auto;
+  margin-top: -30px;
+  text-align: center;
+  display: flex;
+}
+.currency_item div {
+  margin: 10px 20px;
+}
+.currency_elem div {
+  margin: 10px 20px;
+}
+.currency_header {
+  margin-top: 45px;
+}
+.prev_arrow {
+  width: 15px;
+  height: 10px;
+  transform: rotate(-180deg);
+}
+.next_arrow {
+  width: 15px;
+  height: 10px;
+}
+.slide_arrow {
+  margin-top: 35px;
+  display: flex;
+  justify-content: center;
+  justify-content: space-evenly;
+}
