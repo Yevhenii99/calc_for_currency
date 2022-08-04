@@ -3,98 +3,71 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //---Slider
 
-    const slides = document.querySelectorAll('.currency_item'),
-          secondSlides = document.querySelectorAll('.currency_elem'),
-          prevArrow = document.querySelector('.slide_prev'),
-          nextArrow = document.querySelector('.slide_next'),
-          prevArrow2 = document.querySelector('.second_slide_prev'),
-          nextArrow2 = document.querySelector('.second_slide_next'),
-          inputValue1 = document.querySelector('.btn_uah'),
-          inputValue2 = document.querySelector('.btn_usd');
+    function sliderContent(wrapper, insideBlock, photo, prev_Arrow, next_Arrow) {
+      slideWrapper = document.querySelector(wrapper),
+      slideField = document.querySelector(insideBlock),
+      slides = document.querySelectorAll(photo),
+      width = window.getComputedStyle(slideWrapper).width,
+      prevArrow = document.querySelector(prev_Arrow),
+      nextArrow = document.querySelector(next_Arrow);
 
-          let slideIndex = 1;
-          let slideIndex2 = 1;
+      let offset = 0;
 
+      console.log(slides);
+      slideField.style.width = 100 * slides.length + '%';
+      slideField.style.display = 'flex';
+      slideField.style.transition = '0.5s all';
 
-          showSlides(slideIndex);
+      slideWrapper.style.overflow = 'hidden';
 
-          function showSlides(n) {
-            if (n > slides.length) {
-                slideIndex = 1;
-            }
-            if (n < 1) {
-                slideIndex = slides.length;
-            }
+      slides.forEach(item => {
+        item.style.width = width;
+      });
+      nextArrow.addEventListener('click', () => {
+        if (offset === +width.slice(0, width.length - 2) * (slides.length - 1)) {
+          offset = 0;
+        } else {
+          offset += +width.slice(0, width.length - 2);
+        }
 
-            slides.forEach(item => item.style.display = 'none');
-            slides[slideIndex - 1].style.display = 'block';
+        slideField.style.transform = `translateX(-${offset}px)`;
+      });
+
+      prevArrow.addEventListener('click', () => {
+        if (offset === 0) {
+          offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+        } else {
+          offset -= +width.slice(0, width.length - 2);
+        }
+
+        slideField.style.transform = `translateX(-${offset}px)`;
+      });
+    }
+    sliderContent('.wrapper', '.inside_block', '.photo', '.prev_arrow', '.next_arrow');
+
+    function requireData(currency1, currency2) {
+      const inputUah = document.querySelector(currency1),
+      inputUsd = document.querySelector(currency2);
+
+      inputUah.addEventListener('input', () => {
+        const request = new XMLHttpRequest();
+
+        request.open('GET', 'js/db.json');
+        request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        request.send();
+
+        request.addEventListener('load', () => {
+          if (request.status === 200) {
+            const data = JSON.parse(request.response);
+            inputUsd.value = ((+inputUah.value / data.current.usd)).toFixed(2);
+          } else {
+            inputUsd.value = 'Something wrong';
           }
-
-          function plusSlides(n) {
-            showSlides(slideIndex += n);
-          }
-
-          prevArrow.addEventListener('click', () => {
-            plusSlides(-1);
-          });
+        });
+      });
+    }
+    requireData('.uah', '.usd');
           
-          nextArrow.addEventListener('click', () => {
-            plusSlides(1);
-          });
-
-
-          //secondSlider
-
-          showSecondSlides(slideIndex2);
-
-          function showSecondSlides(n) {
-            if (n > secondSlides.length) {
-                slideIndex2 = 1;
-            }
-            if (n < 1) {
-                slideIndex2 = secondSlides.length;
-            }
-            secondSlides.forEach(item => item.style.display = 'none');
-            secondSlides[slideIndex2 - 1].style.display = 'block';
-          }
-
-          function plusSecondSlides(n) {
-            showSecondSlides(slideIndex2 += n);
-          }
-
-          prevArrow2.addEventListener('click', () => {
-            plusSecondSlides(-1);
-          });
-          
-          nextArrow2.addEventListener('click', () => {
-            plusSecondSlides(1);
-          });
-
-
-
-//    const uah = document.querySelector('#uah'),
-//          usd = document.querySelector('#usd');
-
-
-//          uah.addEventListener('input', () => {
-//             const request = new XMLHttpRequest();
-
-//             request.open('GET', 'js/db.json');
-//             request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-//             request.send();
-
-//             request.addEventListener('load', () => {
-//                 if (request.status === 200) {
-//                     console.log(request.response);
-//                     const data = JSON.parse(request.response);
-//                     usd.value = (+uah.value / data.current.usd).toFixed(2);
-//                 } else {
-//                     usd.value = 'Something wrong...';
-//                 }
-//             });
-//          });
-
-
     
          
 });
